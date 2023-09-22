@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+    thead{
+        background-color: green;
+        color: white;
+    }
+    </style>
+<body>
+    <h1>WELCOME ADMIN</h1>
+
+
+<h2>HTML Table</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Role</th>
+            <th>Active</th>
+            <th>Delete</th>
+          </tr>
+    </thead>
+<tbody>
+    <% allUsers.forEach(element => { %>
+        <tr>
+        <th><%= element.username %></th>
+        <th><%= element.role %></th>
+        <th><%= element.active %></th>
+        <th><a href=/<%=element._id %>> <p>Delete</p></a></th>
+    </tr>
+    <% }) %>
+</tbody>
+ 
+</table>
+
+
+
+</body>
+</html>

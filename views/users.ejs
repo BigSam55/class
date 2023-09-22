@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .full-content{
+            display: grid;
+            grid-template-columns: auto auto auto;
+            background-color: black;
+            color: white;
+            font: 25px;
+            padding: 20px;
+        }
+        .initial{
+            border: solid 2px red;
+            border-radius: 100%;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="full-content">
+        <% result.forEach(element => { %>
+            <div class="container">
+                <div class="content">
+                    <div class="initail">
+                        <h2>LG</h2>
+                    </div>
+                    <p>Name: <%= element.name %></p>
+                    <p>Username:<%= element.username %></p>
+                    <p>Email:<%= element.email %></p>
+                    <p>Address: <%= element.address.street %></p>
+                </div>
+            </div>
+    <% }) %>
+    
+    </div>
+    
+
+
+    
+   
+</body>
+</html>

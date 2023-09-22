@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partials/head') %>
+<body>
+<%- include('partials/navbar') %>
+    <%= data.rand %>
+    <% if (data.rand< 5) { %>
+     <h3>Data is less than five</h3>
+    <% }else{%> <h3>Data is greater than five</h3>
+    <%}%>
+    <h3> <%=data.rand<5? 'less than five':'greater than five'%></h3>
+
+    <h1>Courses</h1>
+    <p>
+        Username: <%= data.username %>
+    </p>
+    <div>
+        <h1>All Courses</h1>
+        <% for( let index = 0; index < data.allCourse.length; index++ ) { %>
+        <ul>
+            <li><%= data.allCourse[index] %></li>
+        </ul>
+        <% } %>
+
+    </div>
+</body>
+</html>
