@@ -1,9 +1,12 @@
+require('dotenv').config()
 const mongoose = require('mongoose') // connecting and testing  DB
 
 function connectDB(){
     try {
         console.log('connecting to db')
-        mongoose.connect('mongodb://127.0.0.1:27017/sammy') // sammy is the name of the database
+        mongoose.connect(process.env.db, { useNewUrlParser:true,
+            useUnifiedTopology:true})
+        // mongoose.connect('mongodb://127.0.0.1:27017/sammy') // sammy is the name of the database
         console.log('connected')
     } catch (error) {
         console.log(error)

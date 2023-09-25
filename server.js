@@ -6,6 +6,7 @@
  const bcrypt = require('bcrypt') // TO hash Password
  const session = require('express-session')// to connect session
  const flash = require('connect-flash') // to connect flash
+ const mongodbsession = require('connect-mongodb-session')(session)
 
  // to style using css link use the function AND SETTING UP PUBLIC ASSET
  app.use(express.static(path.join(__dirname, 'Public')))
@@ -24,14 +25,34 @@ const User = require('./model/registrationSchema')
 //Admin schema
 const Admins = require('./model/adminReg')
 
+///Create and secure route and session
+const Store = new mongodbsession({
+   uri:process.env.db,
+   collection: 'userSession'
+})
+
 // set up  our flash with session(some using that browser at the moment)
 app.use(session({
    secret: 'Ketboard cat',
-   saveUninitialized: true,
-   resave: true,
+   saveUninitialized: false,
+   resave:false,
+   store:Store,
+   cookie: {
+      maxAge: 1000 * 60 * 60 *24 * 7/// 7 days
+   }
 }))
 // for passing messages to frontend
 app.use(flash());
+
+///Authentication or a middle ware
+
+const Authentication =(req,res,next)=>{
+   if(req.session.Authentication){
+      next()
+   } else{
+      res.redirect('/login')
+   }
+};
 
 
  // Rendering different pages or consuming endpoint handler
@@ -87,6 +108,7 @@ app.use(flash());
 
 })
  app.get('/register',(req,res)=>{
+   console.log(req.session)
    res.render('register.ejs', {messages:req.flash('info')})
 
 })
@@ -209,7 +231,7 @@ app.post('/registration', async (req, res) => {
          const user = await bcrypt.compare(password,foundUser.password)
    
       if(user){
-         
+         req.session.Authentication = true;
          res.redirect('/dashboard')
       } else{
          req.flash('info', 'Username or Password is incorrect!')
@@ -235,9 +257,16 @@ app.post('/registration', async (req, res) => {
       }
    })
 
-   app.get('/dashboard',(req,res)=>{
+   app.get('/dashboard',Authentication,(req,res)=>{
       res.render('dashboard.ejs', {foundUser})
    
+   })
+   ///creating a logout session
+   app.post('/logout', (req,res)=>{
+      req.session.destroy((err)=>{
+         if(err) throw err;
+         res.redirect('/login')
+      })
    })
 
    // For Admin
@@ -301,7 +330,7 @@ app.post('/registration', async (req, res) => {
 })
 
 //// Deleting a user by the admin
-app.get('/:id', async(req, res)=>{
+app.get('/delete/:id', async(req, res)=>{
 const {id} = req.params
 await User.findByIdAndDelete({_id:id});
 res.redirect('/AdminDashboard')
@@ -316,6 +345,7 @@ app.get('/upload',(req,res)=>{
    res.render('upload.ejs', {foundUser})
 
 })
+
 
 //For uploading images
 // mkdir Uploads
@@ -349,3 +379,4 @@ app.post('/upload', (req, res) => {
     }
   });
 });
+/// Hosting render, vercel.com and git
